@@ -36,25 +36,18 @@
         button:hover {
             background-color: #2980b9;
         }
+        #timer {
+            font-size: 24px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>Générateur de Temps d'Attente</h1>
-        <p>Cliquez sur le bouton pour générer un temps d'attente aléatoire entre 5 et 90 minutes.</p>
-        <button onclick="generateWaitTime()">Générer le Temps d'Attente</button>
+        <button onclick="generateWaitTime()">Générer un temps d'attente</button>
         <p class="result" id="result">Cliquez pour un temps d'attente</p>
+        <p id="timer"></p>
     </div>
-
-    <script>
-        function generateWaitTime() {
-            // Générer un temps d'attente entre 5 et 90 minutes
-            let waitTime = Math.floor(Math.random() * (90 - 5 + 1)) + 5;
-            // Afficher le temps d'attente dans l'élément avec l'ID 'result'
-            document.getElementById('result').textContent = waitTime + " minutes";
-        }
-    </script>
-
-</body>
-</html>
