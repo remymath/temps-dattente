@@ -47,7 +47,49 @@
 <body>
 
     <div class="container">
-        <button onclick="generateWaitTime()">Générer un temps d'attente</button>
+        <h1>Générateur de Temps d'Attente</h1>
+        <p>Cliquez sur le bouton pour générer un temps d'attente aléatoire entre 5 et 90 minutes.</p>
+        <button onclick="generateWaitTime()">Générer le Temps d'Attente</button>
         <p class="result" id="result">Cliquez pour un temps d'attente</p>
         <p id="timer"></p>
     </div>
+
+    <script>
+        let countdown;
+        let totalTime;
+
+        function generateWaitTime() {
+            // Générer un temps d'attente entre 5 et 90 minutes
+            let waitTime = Math.floor(Math.random() * (90 - 5 + 1)) + 5;
+            // Afficher le temps d'attente dans l'élément avec l'ID 'result'
+            document.getElementById('result').textContent = waitTime + " minutes";
+
+            // Calculer le nombre total de secondes pour le décompte
+            totalTime = waitTime * 60;
+            
+            // Démarrer le chronomètre
+            startTimer();
+        }
+
+        function startTimer() {
+            // Si un chronomètre est déjà en cours, on l'arrête
+            if (countdown) clearInterval(countdown);
+            
+            // Mise à jour toutes les secondes
+            countdown = setInterval(function() {
+                if (totalTime <= 0) {
+                    clearInterval(countdown);
+                    document.getElementById('timer').textContent = "Temps écoulé !";
+                } else {
+                    let minutes = Math.floor(totalTime / 60);
+                    let seconds = totalTime % 60;
+                    // Formatage des minutes et secondes (ajout de 0 si moins de 10)
+                    document.getElementById('timer').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                    totalTime--;
+                }
+            }, 1000); // Met à jour toutes les secondes
+        }
+    </script>
+
+</body>
+</html>
