@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Temps d'Attente</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,22 +25,21 @@
             color: black;
         }
         button {
-            background-color: #34dbaf;
-            color: black;
+            background-color: #25d1c0;
+            color: white;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
-            font-size: 30px;
+            font-size: 20px;
             font-weight: bold;
             cursor: pointer;
         }
         button:hover {
-            background-color: white ;
+            background-color: #2980b9;
         }
         #timer {
-            font-size: 24px;
-            margin-top: 30px;
-            font-weight: bold;
+            font-size: 30px;
+            margin-top: 20px;
             color: #e74c3c;
         }
     </style>
@@ -47,9 +47,10 @@
 <body>
 
     <div class="container">
-
-        <button onclick="generateWaitTime()">Générer un temps d'attente</button>
-
+        <h1>Générateur de Temps d'Attente</h1>
+        <p>Cliquez sur le bouton pour générer un temps d'attente aléatoire entre 5 et 90 minutes.</p>
+        <button onclick="generateWaitTime()">Générer le Temps d'Attente</button>
+        <p class="result" id="result">Cliquez pour un temps d'attente</p>
         <p id="timer"></p>
     </div>
 
