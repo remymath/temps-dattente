@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Temps d'Attente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .container {
+            background-color: #f0f0f0;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .result {
+            font-size: 36px;
+            font-weight: bold;
+            color: #3498db;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Générateur de Temps d'Attente</h1>
+        <p>Cliquez sur le bouton pour générer un temps d'attente aléatoire entre 5 et 90 minutes.</p>
+        <button onclick="generateWaitTime()">Générer le Temps d'Attente</button>
+        <p class="result" id="result">Cliquez pour un temps d'attente</p>
+    </div>
+
+    <script>
+        function generateWaitTime() {
+            // Générer un temps d'attente entre 5 et 90 minutes
+            let waitTime = Math.floor(Math.random() * (90 - 5 + 1)) + 5;
+            // Afficher le temps d'attente dans l'élément avec l'ID 'result'
+            document.getElementById('result').textContent = waitTime + " minutes";
+        }
+    </script>
+
+</body>
+</html>
