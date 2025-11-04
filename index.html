@@ -19,12 +19,11 @@
             max-width: 500px;
             margin: 0 auto;
         }
-        /* Cacher le titre et la description */
         #title, #description {
             display: none;
         }
         .result {
-            font-size: 15px;
+            font-size: 18px;
             font-weight: bold;
             color: black;
         }
@@ -41,7 +40,7 @@
             background-color: black;
         }
         #timer {
-            font-size: 24px;
+            font-size: 22px;
             margin-top: 30px;
             font-weight: bold;
             color: #e74c3c;
@@ -51,13 +50,11 @@
 <body>
 
     <div class="container">
-        <!-- Titre caché -->
         <h1 id="title">Générateur de Temps d'Attente</h1>
-        <!-- Description cachée -->
-        <p id="description">Cliquez sur le bouton pour générer un temps d'attente aléatoire entre 5 et 90 minutes.</p>
+        <p id="description">Cliquez sur le bouton pour générer un temps d'attente aléatoire entre 525600 et 1576800 minutes.</p>
 
         <button onclick="generateWaitTime()">Générer un temps d'attente</button>
-        <p class="result" id="result">Cliquez sur le bouton </p>
+        <p class="result" id="result">Cliquez sur le bouton</p>
         <p id="timer"></p>
     </div>
 
@@ -66,35 +63,48 @@
         let totalTime;
 
         function generateWaitTime() {
-            // Générer un temps d'attente entre 525600 et 1576800 minutes
+            // Générer un temps d'attente entre 525600 et 1576800 minutes (1 à 3 ans)
             let waitTime = Math.floor(Math.random() * (1576800 - 525600 + 1)) + 525600;
-            // Afficher le temps d'attente dans l'élément avec l'ID 'result'
-            document.getElementById('result').textContent = waitTime + " minutes";
 
-            // Calculer le nombre total de secondes pour le décompte
+            // Conversion en jours, heures et minutes
+            let days = Math.floor(waitTime / (60 * 24));
+            let remainingMinutes = waitTime % (60 * 24);
+            let hours = Math.floor(remainingMinutes / 60);
+            let minutes = remainingMinutes % 60;
+
+            // Affichage lisible
+            let formattedTime = `${days} jours, ${hours} heures et ${minutes} minutes`;
+
+            document.getElementById('result').textContent = formattedTime;
+
+            // Conversion totale en secondes pour le décompte
             totalTime = waitTime * 60;
-            
+
             // Démarrer le chronomètre
             startTimer();
         }
 
         function startTimer() {
-            // Si un chronomètre est déjà en cours, on l'arrête
             if (countdown) clearInterval(countdown);
-            
-            // Démarrer un nouveau chronomètre
+
             countdown = setInterval(function() {
                 if (totalTime <= 0) {
                     clearInterval(countdown);
-                    document.getElementById('timer').textContent = "Temps écoulé !";
+                    document.getElementById('timer').textContent = "⏰ Temps écoulé !";
                 } else {
-                    let minutes = Math.floor(totalTime / 60);
+                    // Calcul des jours, heures, minutes et secondes restants
+                    let days = Math.floor(totalTime / (24 * 3600));
+                    let hours = Math.floor((totalTime % (24 * 3600)) / 3600);
+                    let minutes = Math.floor((totalTime % 3600) / 60);
                     let seconds = totalTime % 60;
-                    // Formatage des minutes et secondes (ajout de 0 si moins de 10)
-                    document.getElementById('timer').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                    // Format avec des zéros devant si besoin
+                    let formatted = `${days}j ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+
+                    document.getElementById('timer').textContent = formatted;
                     totalTime--;
                 }
-            }, 1000); // Met à jour toutes les secondes
+            }, 1000);
         }
     </script>
 
