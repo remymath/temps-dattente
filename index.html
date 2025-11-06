@@ -1,133 +1,142 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Start / Stop</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #e0e0e0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin: 0;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Start / Stop</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+  }
 
-    /* ---- BOUTON GÉANT START / STOP ---- */
+  /* ---- BOUTON GÉANT START / STOP ---- */
+  .start-btn {
+    border: none;
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: #000;
+    color: #fff;
+    font-size: 90px;
+    line-height: 1;
+    position: relative;
+  }
+
+  /* Ajustement du contenu pour centrer la flèche / barres */
+  .start-btn span {
+    position: relative;
+    top: -5px; /* remonte légèrement pour centrer visuellement */
+    left: 2px; /* décalage léger vers la droite */
+  }
+
+  .result {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin-top: 50px;
+  }
+
+  #timer {
+    font-size: 28px;
+    font-weight: 700;
+    color: #555;
+    margin-top: 25px;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 500px) {
     .start-btn {
-      border: none;
-      border-radius: 50%;
-      width: 200px;
-      height: 200px;
-      font-size: 90px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center; /* centrage parfait */
-      transition: all 0.2s ease;
-      line-height: 1;
-      padding: 0;
-      background: #000;
-      color: #fff;
+      width: 150px;
+      height: 150px;
+      font-size: 70px;
     }
-
-    .result {
-      font-size: 20px;
-      font-weight: 600;
-      color: #333;
-      margin-top: 50px;
-    }
-
-    #timer {
-      font-size: 28px;
-      font-weight: 700;
-      color: #555;
-      margin-top: 25px;
-      letter-spacing: 1px;
-    }
-
-    @media (max-width: 500px) {
-      .start-btn {
-        width: 150px;
-        height: 150px;
-        font-size: 70px;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
 
-  <button class="start-btn" id="controlButton" onclick="toggleTimer()">▶</button>
+<button class="start-btn" id="controlButton" onclick="toggleTimer()"><span>▶</span></button>
 
-  <p id="timer"></p>
+<p id="timer"></p>
 
-  <script>
-    let countdown;
-    let totalTime = 0;
-    let isRunning = false;
-    let isPaused = false;
+<script>
+let countdown;
+let totalTime = 0;
+let isRunning = false;
+let isPaused = false;
 
-    function generateWaitTime() {
-      // Temps aléatoire entre 1 et 3 ans (en minutes)
-      let waitTime = Math.floor(Math.random() * (1576800 - 525600 + 1)) + 525600;
-      totalTime = waitTime * 60; // Conversion en secondes pour le décompte
+function generateWaitTime() {
+  let waitTime = Math.floor(Math.random() * (1576800 - 525600 + 1)) + 525600;
+  totalTime = waitTime * 60;
+}
+
+function startTimer() {
+  if (countdown) clearInterval(countdown);
+
+  countdown = setInterval(function() {
+    if (totalTime <= 0) {
+      clearInterval(countdown);
+      document.getElementById('timer').textContent = "Temps écoulé.";
+      setButtonState('start');
+      isRunning = false;
+      isPaused = false;
+    } else {
+      let days = Math.floor(totalTime / (24*3600));
+      let hours = Math.floor((totalTime % (24*3600))/3600);
+      let minutes = Math.floor((totalTime % 3600)/60);
+      let seconds = totalTime % 60;
+      let formatted = `${days}j ${hours.toString().padStart(2,'0')}h ${minutes.toString().padStart(2,'0')}m ${seconds.toString().padStart(2,'0')}s`;
+      document.getElementById('timer').textContent = formatted;
+      totalTime--;
     }
+  }, 1000);
+}
 
-    function startTimer() {
-      if (countdown) clearInterval(countdown);
+function setButtonState(state) {
+  const button = document.getElementById('controlButton');
+  const span = button.querySelector('span');
+  if(state === 'start') {
+    span.textContent = '▶';
+    button.style.background = '#000';
+    button.style.color = '#fff';
+  } else if(state === 'pause') {
+    span.textContent = '⏸';
+    button.style.background = '#000';
+    button.style.color = '#fff';
+  }
+}
 
-      countdown = setInterval(function() {
-        if (totalTime <= 0) {
-          clearInterval(countdown);
-          document.getElementById('timer').textContent = "Temps écoulé.";
-          setButtonState('start');
-          isRunning = false;
-          isPaused = false;
-        } else {
-          let days = Math.floor(totalTime / (24 * 3600));
-          let hours = Math.floor((totalTime % (24 * 3600)) / 3600);
-          let minutes = Math.floor((totalTime % 3600) / 60);
-          let seconds = totalTime % 60;
-
-          let formatted = `${days}j ${hours.toString().padStart(2,'0')}h ${minutes.toString().padStart(2,'0')}m ${seconds.toString().padStart(2,'0')}s`;
-          document.getElementById('timer').textContent = formatted;
-
-          totalTime--;
-        }
-      }, 1000);
-    }
-
-    function setButtonState(state) {
-      const button = document.getElementById('controlButton');
-      if(state === 'start') {
-        button.textContent = "▶";
-      } else if(state === 'pause') {
-        button.textContent = "⏸";
-      }
-    }
-
-    function toggleTimer() {
-      if (!isRunning) {
-        generateWaitTime();
-        startTimer();
-        setButtonState('pause');
-        isRunning = true;
-        isPaused = false;
-      } else if (!isPaused) {
-        clearInterval(countdown);
-        setButtonState('start');
-        isPaused = true;
-      } else {
-        startTimer();
-        setButtonState('pause');
-        isPaused = false;
-      }
-    }
-  </script>
+function toggleTimer() {
+  if(!isRunning){
+    generateWaitTime();
+    startTimer();
+    setButtonState('pause');
+    isRunning = true;
+    isPaused = false;
+  } else if(!isPaused){
+    clearInterval(countdown);
+    setButtonState('start');
+    isPaused = true;
+  } else{
+    startTimer();
+    setButtonState('pause');
+    isPaused = false;
+  }
+}
+</script>
 
 </body>
 </html>
