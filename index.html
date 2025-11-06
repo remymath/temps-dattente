@@ -4,84 +4,142 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Générateur de Temps d'Attente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        /* ---- STYLE GLOBAL ---- */
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f0f0, #c0c0c0);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #222;
+            margin: 0;
         }
+
         .container {
-            background-color: #f0f0f0;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 80%;
-            max-width: 500px;
-            margin: 0 auto;
+            background-color: #f9f9f9;
+            border-radius: 25px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            width: 90%;
+            max-width: 420px;
+            animation: fadeIn 1s ease;
         }
-        #title, #description {
-            display: none;
+
+        h1 {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #111;
         }
-        .result {
-            font-size: 18px;
-            font-weight: bold;
-            color: black;
+
+        p#description {
+            color: #555;
+            font-size: 15px;
+            margin-bottom: 35px;
         }
-        button {
-            background-color: #25d1c0;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 30px;
+
+        /* ---- BOUTON START/PAUSE ---- */
+        .start-btn {
+            background: #fff;
+            color: #000;
+            padding: 18px 22px;
+            border: 2px solid #000;
+            border-radius: 50%;
+            font-size: 28px;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s ease;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
         }
-        button:hover {
-            background-color: black;
+
+        .start-btn:hover {
+            background: #000;
+            color: #fff;
+            transform: scale(1.08);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
         }
-        #timer {
-            font-size: 22px;
+
+        .result {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
             margin-top: 30px;
-            font-weight: bold;
-            color: #e74c3c;
+        }
+
+        #timer {
+            font-size: 26px;
+            font-weight: 700;
+            color: #555;
+            margin-top: 25px;
+            letter-spacing: 1px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Petits écrans */
+        @media (max-width: 500px) {
+            .container {
+                padding: 25px 20px;
+            }
+
+            .start-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+
+            #timer {
+                font-size: 22px;
+            }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1 id="title">Générateur de Temps d'Attente</h1>
-        <p id="description">Cliquez sur le bouton pour générer un temps d'attente aléatoire entre 525600 et 1576800 minutes.</p>
+        <h1>Générateur de Temps d'Attente</h1>
+        <p id="description">Cliquez sur le bouton pour générer un temps d’attente aléatoire entre 1 et 3 ans.</p>
 
-        <button onclick="generateWaitTime()">Générer un temps d'attente</button>
-        <p class="result" id="result">Cliquez sur le bouton</p>
+        <button class="start-btn" id="controlButton" onclick="toggleTimer()">▶️</button>
+
+        <p class="result" id="result"></p>
         <p id="timer"></p>
     </div>
 
     <script>
         let countdown;
-        let totalTime;
+        let totalTime = 0;
+        let isRunning = false;
+        let isPaused = false;
 
         function generateWaitTime() {
-            // Générer un temps d'attente entre 525600 et 1576800 minutes (1 à 3 ans)
+            // Génère un temps d’attente entre 1 et 3 ans (en minutes)
             let waitTime = Math.floor(Math.random() * (1576800 - 525600 + 1)) + 525600;
 
-            // Conversion en jours, heures et minutes
+            // Conversion en jours, heures, minutes
             let days = Math.floor(waitTime / (60 * 24));
             let remainingMinutes = waitTime % (60 * 24);
             let hours = Math.floor(remainingMinutes / 60);
             let minutes = remainingMinutes % 60;
 
             // Affichage lisible
-            let formattedTime = `${days} jours, ${hours} heures et ${minutes} minutes`;
-
+            let formattedTime = `${days} jours, ${hours} h, ${minutes} min`;
             document.getElementById('result').textContent = formattedTime;
 
-            // Conversion totale en secondes pour le décompte
+            // Conversion en secondes pour le compte à rebours
             totalTime = waitTime * 60;
-
-            // Démarrer le chronomètre
-            startTimer();
         }
 
         function startTimer() {
@@ -90,21 +148,45 @@
             countdown = setInterval(function() {
                 if (totalTime <= 0) {
                     clearInterval(countdown);
-                    document.getElementById('timer').textContent = "⏰ Temps écoulé !";
+                    document.getElementById('timer').textContent = "Temps écoulé.";
+                    document.getElementById('controlButton').textContent = "▶️";
+                    isRunning = false;
+                    isPaused = false;
                 } else {
-                    // Calcul des jours, heures, minutes et secondes restants
                     let days = Math.floor(totalTime / (24 * 3600));
                     let hours = Math.floor((totalTime % (24 * 3600)) / 3600);
                     let minutes = Math.floor((totalTime % 3600) / 60);
                     let seconds = totalTime % 60;
 
-                    // Format avec des zéros devant si besoin
                     let formatted = `${days}j ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
-
                     document.getElementById('timer').textContent = formatted;
+
                     totalTime--;
                 }
             }, 1000);
+        }
+
+        function toggleTimer() {
+            const button = document.getElementById('controlButton');
+
+            if (!isRunning) {
+                // Démarrage initial
+                generateWaitTime();
+                startTimer();
+                button.textContent = "⏸";
+                isRunning = true;
+                isPaused = false;
+            } else if (!isPaused) {
+                // Mise en pause
+                clearInterval(countdown);
+                button.textContent = "▶️";
+                isPaused = true;
+            } else {
+                // Reprise
+                startTimer();
+                button.textContent = "⏸";
+                isPaused = false;
+            }
         }
     </script>
 
