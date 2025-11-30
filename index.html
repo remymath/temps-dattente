@@ -66,8 +66,8 @@
         let totalTime;
 
         function generateWaitTime() {
-            // Générer un temps d'attente entre 525600 et 1576800 minutes
-            let waitTime = Math.floor(Math.random() * (1576800 - 525600 + 1)) + 525600;
+            // Générer un temps d'attente entre 5 et 90 minutes
+            let waitTime = Math.floor(Math.random() * (90 - 5 + 1)) + 5;
             // Afficher le temps d'attente dans l'élément avec l'ID 'result'
             document.getElementById('result').textContent = waitTime + " minutes";
 
